@@ -11,10 +11,12 @@ from twilio.rest import Client
 #subprocess.run([source, './twilio.env'])
 
 # Your Account Sid and Auth Token from twilio.com/console
-account_sid = os.environ['TWILIO_ACCOUNT_SID']
-auth_token = os.environ['TWILIO_AUTH_TOKEN']
+# Testing credentials
+account_sid = 'AC8081570defa86830b974745378543f2a'
+auth_token = '8f3d26f0bb5cf9d19c8e90be882e1b1b'
+
 path = os.path.dirname(os.path.abspath(__file__))
-excel_path = path+"/honda.xlsx"
+excel_path = path+"/phonenumber.xlsx"
 
 phone_number_list = []
 code_list = []
@@ -44,6 +46,15 @@ def readList(filepath): # read phone number & voucher code from Excel file
                 print ("Code / Phone Number Incompleted")
 
         print (client_list)
+    except:
+        print("File Error")
+
+def getTextBody():
+    filepath = path + '/body.txt'
+    try:
+       f = open(filepath, 'r')
+       print (f.read())
+       return f.read()
     except:
         print("File Error")
     
@@ -96,12 +107,14 @@ def sendMultipleSMS(body, client_list): # send multiple SMS from Excel file
 
 #### MAIN CODE HERE ####
 
-text = """Thank You for Test Drive with Honda.
-To Get 2000 AOT Points:
-1. Go to Me tab
-2. Click Earn AOT Point
-3. Click Voucher Code
-4. Fill in code: """
+#initialize using production credentials
+account_sid = os.environ['TWILIO_ACCOUNT_SID']
+auth_token = os.environ['TWILIO_AUTH_TOKEN']
 
+text = getTextBody()
 readList(excel_path)
-sendMultipleSMS(text, client_list)
+
+if input('Process to Send SMS? (Y/n)') != 'Y':
+    exit()
+else :   
+    sendMultipleSMS(text, client_list)
