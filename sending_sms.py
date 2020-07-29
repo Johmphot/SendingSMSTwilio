@@ -53,8 +53,9 @@ def getTextBody():
     filepath = path + '/body.txt'
     try:
        f = open(filepath, 'r')
-       print (f.read())
-       return f.read()
+       text = f.read()
+       print (text)
+       return text
     except:
         print("File Error")
     
@@ -87,7 +88,6 @@ def sendMultipleSMS(body, client_list): # send multiple SMS from Excel file
         for usr in client_list:
             if len(usr) == 2:
                 msg_body = mergeText(body, usr[1])
-                
                 message = client.messages.create(
                         from_='AOTAPP',
                         to= usr[0],
@@ -114,7 +114,7 @@ auth_token = os.environ['TWILIO_AUTH_TOKEN']
 text = getTextBody()
 readList(excel_path)
 
-if input('Process to Send SMS? (Y/n)') != 'Y':
+if input('Proceed to Send SMS? (Y/n)') != 'Y':
     exit()
 else :   
     sendMultipleSMS(text, client_list)
